@@ -14,6 +14,15 @@ SECRET_KEY = "django-insecure-(e(d5-y=qbt$n#a5mmk#wluf@$qminxjzve_6&0qqyi^yk-^2c
 
 ALLOWED_HOSTS = ["*"]
 
+if DEBUG:
+    import socket  # only if you haven't already imported this
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
+        "127.0.0.1",
+        "10.0.2.2",
+    ]
+
 
 # Application definition
 
@@ -36,6 +45,7 @@ INSTALLED_APPS = [
     # 3rd party
     "modelcluster",
     "taggit",
+    "debug_toolbar",
     # Django
     "django.contrib.admin",
     "django.contrib.auth",
@@ -53,6 +63,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
