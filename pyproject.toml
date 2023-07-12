@@ -11,6 +11,7 @@ python = "^3.11"
 wagtail = "^5.0.2"
 django = "^4.2.3"
 django-debug-toolbar = "^4.1.0"
+environs = {extras = ["django"], version = "^9.5.0"}
 
 
 [tool.poetry.group.dev.dependencies]

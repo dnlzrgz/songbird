@@ -4,13 +4,20 @@ Django settings for songbird project.
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from environs import Env
+
+env = Env()
+env.read_env()
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
-DEBUG = True
+DEBUG = env.bool("DJANGO_DEBUG", False)
 
-SECRET_KEY = "django-insecure-(e(d5-y=qbt$n#a5mmk#wluf@$qminxjzve_6&0qqyi^yk-^2c"
+SECRET_KEY = env.str(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-(e(d5-y=qbt$n#a5mmk#wluf@$qminxjzve_6&0qqyi^yk-^2c",
+)
 
 ALLOWED_HOSTS = ["*"]
 
