@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "songbird"
+version = "0.1.0"
+description = ""
+authors = ["daniarlert <arlertdaniel@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+wagtail = "^5.0.2"
+django = "^4.2.3"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.3.3"
+black = "^23.7.0"
+commitizen = "^3.5.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
