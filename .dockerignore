@@ -37,3 +37,12 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Git / repository
+.git
+.gitignore
+.pre-commit-config.yaml
+poetry.lock
+poetry.toml
+README.md
+LICENSE

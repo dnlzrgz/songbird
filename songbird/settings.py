@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "whitenoise.runserver_nostatic",  # WhiteNoise on dev
+    "whitenoise.runserver_nostatic",  # WhiteNoise on development
     "django.contrib.staticfiles",
 ]
 
@@ -105,8 +105,12 @@ WSGI_APPLICATION = "songbird.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env.str("DB_NAME", "postgres"),
+        "USER": env.str("DB_USER", "postgres"),
+        "PASSWORD": env.str("DB_PASSWORD", "postgres"),
+        "HOST": env.str("DB_HOST", "db"),
+        "PORT": env.int("DB_PORT", 5432),
     }
 }
 
