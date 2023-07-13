@@ -9,16 +9,21 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PORT=8000
 
+WORKDIR /app
+
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
+    curl \
     libjpeg62-turbo-dev \
     zlib1g-dev \
     libwebp-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt /
-RUN pip install -r /requirements.txt
+RUN curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && \
+    mv tailwindcss-linux-x64 tailwindcss && \
+    chmod +x tailwindcss
 
-WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
 RUN chown wagtail:wagtail /app
 

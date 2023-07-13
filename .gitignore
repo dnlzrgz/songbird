@@ -259,5 +259,8 @@ poetry.toml
 # ruff
 .ruff_cache/
 
+### Tailwind CSS ###
+tailwindcss
+
 # LSP config files
 pyrightconfig.json
