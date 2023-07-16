@@ -23,3 +23,7 @@ repos:
             "requirements.txt",
             "--without-hashes",
           ]
+  - repo: https://github.com/rtts/djhtml
+    rev: "3.0.6"
+    hooks:
+      - id: djhtml

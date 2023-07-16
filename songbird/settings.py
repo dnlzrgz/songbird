@@ -2,8 +2,8 @@
 Django settings for songbird project.
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import socket
 from environs import Env
 
 env = Env()
@@ -21,14 +21,11 @@ SECRET_KEY = env.str(
 
 ALLOWED_HOSTS = ["*"]
 
-if DEBUG:
-    import socket  # only if you haven't already imported this
-
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
-        "127.0.0.1",
-        "10.0.2.2",
-    ]
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
+    "127.0.0.1",
+    "10.0.2.2",
+]
 
 
 # Application definition
@@ -52,8 +49,6 @@ INSTALLED_APPS = [
     # 3rd party
     "modelcluster",
     "taggit",
-    "debug_toolbar",
-    "django_browser_reload",
     # Django
     "django.contrib.admin",
     "django.contrib.auth",
@@ -64,12 +59,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 ]
 
+if DEBUG:
+    INSTALLED_APPS += [
+        "debug_toolbar",
+        "django_browser_reload",
+    ]
+
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -78,13 +77,21 @@ MIDDLEWARE = [
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
 ]
 
+if DEBUG:
+    middleware_idx = MIDDLEWARE.index("django.middleware.common.CommonMiddleware") + 1
+
+    MIDDLEWARE.insert(middleware_idx, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    MIDDLEWARE.insert(
+        middleware_idx,
+        "django_browser_reload.middleware.BrowserReloadMiddleware",
+    )
+
 ROOT_URLCONF = "songbird.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
-            # os.path.join(BASE_DIR, "templates"),
             os.path.join(PROJECT_DIR, "templates"),
         ],
         "APP_DIRS": True,
@@ -189,6 +196,7 @@ WAGTAILSEARCH_BACKENDS = {
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 WAGTAILADMIN_BASE_URL = "http://example.com"
+
 
 # Email backed
 # https://docs.djangoproject.com/en/4.2/topics/email/

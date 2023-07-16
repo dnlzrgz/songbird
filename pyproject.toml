@@ -22,6 +22,7 @@ django-browser-reload = "^1.11.0"
 pre-commit = "^3.3.3"
 black = "^23.7.0"
 commitizen = "^3.5.2"
+djhtml = "^3.0.6"
 
 [build-system]
 requires = ["poetry-core"]
