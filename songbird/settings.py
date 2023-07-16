@@ -4,6 +4,7 @@ Django settings for songbird project.
 
 import os
 import socket
+
 from environs import Env
 
 env = Env()
