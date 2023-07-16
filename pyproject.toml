@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "songbird"
-version = "0.2.3"
+version = "0.2.6"
 description = ""
 authors = ["daniarlert <arlertdaniel@gmail.com>"]
 license = "MIT"

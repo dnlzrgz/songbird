@@ -1,4 +1,5 @@
 from wagtail.blocks import (
+    BooleanBlock,
     CharBlock,
     EmailBlock,
     ListBlock,
@@ -6,6 +7,7 @@ from wagtail.blocks import (
     StructBlock,
     URLBlock,
 )
+from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.images.blocks import ImageChooserBlock
 
 
@@ -58,3 +60,55 @@ class BiographyCardWidget(StructBlock):
     contact_email = EmailBlock(
         required=True,
     )
+
+
+class VideoWidget(StructBlock):
+    class Meta:
+        template = "home/widgets/video_widget.html"
+
+    title = CharBlock(
+        required=True,
+        help_text="Video title.",
+    )
+    video = DocumentChooserBlock()
+    poster = ImageChooserBlock(
+        required=True,
+        help_text="Poster image for the video player.",
+    )
+
+
+class TabWidget(StructBlock):
+    class Meta:
+        template = "home/widgets/tab_widget.html"
+
+    tabs = ListBlock(
+        StructBlock(
+            [
+                ("title", CharBlock(required=True)),
+                (
+                    "body",
+                    RichTextBlock(
+                        features=[
+                            "bold",
+                            "italic",
+                            "link",
+                            "ol",
+                            "ul",
+                            "blockquote",
+                        ],
+                    ),
+                ),
+            ],
+        ),
+    )
+
+
+class TaskListWidget(StructBlock):
+    class Meta:
+        template = "home/widgets/task_list_widget.html"
+
+    title = CharBlock(
+        required=True,
+        help_text="Task list name.",
+    )
+    tasks = ListBlock(CharBlock(max_length=100))
