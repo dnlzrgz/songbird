@@ -12,18 +12,18 @@ ENV PORT=8000
 WORKDIR /app
 
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
-    curl \
-    libjpeg62-turbo-dev \
-    zlib1g-dev \
-    libwebp-dev \
-    && rm -rf /var/lib/apt/lists/*
+  curl \
+  libjpeg62-turbo-dev \
+  zlib1g-dev \
+  libwebp-dev \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && \
-    mv tailwindcss-linux-x64 tailwindcss && \
-    chmod +x tailwindcss
+  mv tailwindcss-linux-x64 tailwindcss && \
+  chmod +x tailwindcss
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 RUN chown wagtail:wagtail /app
 

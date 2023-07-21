@@ -32,8 +32,12 @@
     />
   </head>
 
-  <body class="{% block body_class %}{% endblock %}">
-    {% wagtailuserbar %} {% block content %} {% endblock %}
+  <body class="bg-zinc-50 dark:bg-zinc-700 w-screen h-screen">
+    {% include "background.html" %}
+    {% block content %}
+    {% endblock %}
+    {% wagtailuserbar %}
     <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
-  </body>
+  </div>
+</body>
 </html>

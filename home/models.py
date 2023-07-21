@@ -1,4 +1,3 @@
-from django.db import models
 from wagtail.admin.panels import FieldPanel
 from wagtail.blocks import StreamBlock
 from wagtail.fields import StreamField

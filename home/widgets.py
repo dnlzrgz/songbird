@@ -1,5 +1,4 @@
 from wagtail.blocks import (
-    BooleanBlock,
     CharBlock,
     EmailBlock,
     ListBlock,
