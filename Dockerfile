@@ -2,12 +2,12 @@ FROM python:3.11-slim-bookworm
 
 RUN useradd wagtail
 
-EXPOSE 8000
-
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PORT=8000
+
+EXPOSE ${PORT}
 
 WORKDIR /app
 
@@ -27,10 +27,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN chown wagtail:wagtail /app
 
-COPY --chown=wagtail:wagtail . .
+# COPY --chown=wagtail:wagtail . .
 
-USER wagtail
+# USER wagtail
 
-RUN python manage.py collectstatic --noinput --clear
-
-CMD set -xe; python manage.py migrate --noinput; gunicorn songbird.wsgi:application
+CMD set -xe; python manage.py collectstatic --noinput --clear; python manage.py migrate --noinput; gunicorn songbird.wsgi:application
