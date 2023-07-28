@@ -1,0 +1,29 @@
+<article
+  draggable="true"
+  class="absolute p-4 max-w-md mx-auto text-sm font-normal bg-white border border-gray-200 rounded-lg"
+  x-data="{
+    locale: 'en-Us',
+    currentDate: new Date(),
+    weekdays: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  }"
+>
+  <header>
+    <span
+      x-text="currentDate.toLocaleDateString(locale, {
+        weeday: 'long',
+        year:   'numeric',
+        month:  'long',
+        day:    'numeric',
+      })"
+    ></span>
+  </header>
+  <main>
+    <ul class="flex">
+      <template x-for="day in weekdays">
+        <li x-text="day"></li>
+      </template>
+    </ul>
+
+    <!-- TODO: add list of days -->
+  </main>
+</article>

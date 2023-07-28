@@ -1,0 +1,23 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<article
+  draggable="true"
+  class="absolute p-4 max-w-md mx-auto text-sm font-normal bg-white border border-gray-200 rounded-lg"
+  }"
+>
+  <header>
+    <span>Biography</span>
+  </header>
+  <main>
+    <div>
+      {% image value.photo width-300 height-300 %}
+      {{ value.name }}
+    </div>
+    <div>
+      {{ value.biography|richtext }}
+    </div>
+  </main>
+  <footer>
+    {{ value.contact_email }}
+  </footer>
+</article>

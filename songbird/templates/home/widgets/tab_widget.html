@@ -1,0 +1,80 @@
+<div
+  x-data="{
+    tabSelected: 1,
+    tabId: $id('tabs'),
+    tabButtonClicked(tabButton){
+      this.tabSelected = tabButton.id.replace(this.tabId + '-', '');
+      this.tabRepositionMarker(tabButton);
+    },
+    tabRepositionMarker(tabButton){
+      this.$refs.tabMarker.style.width=tabButton.offsetWidth + 'px';
+      this.$refs.tabMarker.style.height=tabButton.offsetHeight + 'px';
+      this.$refs.tabMarker.style.left=tabButton.offsetLeft + 'px';
+    },
+    tabContentActive(tabContent){
+      return this.tabSelected == tabContent.id.replace(this.tabId + '-content-', '');
+    }
+  }"
+  x-init="tabRepositionMarker($refs.tabButtons.firstElementChild);"
+  class="absolute w-full max-w-sm"
+>
+  <!-- TODO: force all grid-cols-$ classes -->
+  <div
+    x-ref="tabButtons"
+    class="relative inline-grid items-center justify-center w-full h-10 grid-cols-{{ value.tabs|length }} p-1 text-gray-500 bg-white border border-gray-100 rounded-lg select-none"
+  >
+    {% for tab in value.tabs %}
+    <button
+      :id="$id(tabId)"
+      @click="tabButtonClicked($el);"
+      type="button"
+      :class="{ 'bg-gray-100 text-gray-700' : tabButtonActive($el) }"
+      class="relative z-20 inline-flex items-center justify-center w-full h-8 px-3 text-sm font-medium transition-all rounded-md cursor-pointer whitespace-nowrap"
+    >
+      {{ tab.title }}
+    </button>
+    {% endfor %}
+    <div
+      x-ref="tabMarker"
+      class="absolute left-0 z-10 w-1/2 h-full duration-300 ease-out"
+      x-cloak
+    >
+      <div class="w-full h-full bg-gray-100 rounded-md shadow-sm"></div>
+    </div>
+  </div>
+  <div
+    class="relative flex items-center justify-center w-full p-5 mt-2 text-xs text-gray-400 border rounded-md content border-gray-200/70"
+  >
+    <div
+      :id="$id(tabId + '-content')"
+      x-show="tabContentActive($el)"
+      class="relative"
+    >
+      This is the content shown for Tab1
+    </div>
+    <div
+      :id="$id(tabId + '-content')"
+      x-show="tabContentActive($el)"
+      class="relative"
+      x-cloak
+    >
+      And, this is the content for Tab2
+    </div>
+    <div
+      :id="$id(tabId + '-content')"
+      x-show="tabContentActive($el)"
+      class="relative"
+      x-cloak
+    >
+      Finally, this is the content for Tab3
+    </div>
+    <div
+      :id="$id(tabId + '-content')"
+      x-show="tabContentActive($el)"
+      class="relative"
+      x-cloak
+    >
+      This is the content for Tab4
+    </div>
+  </div>
+</div>
