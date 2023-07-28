@@ -30,14 +30,16 @@
       type="text/css"
       href="{% static 'css/style.css' %}"
     />
+
+    {# Alpine.js #}
+    <script defer type="text/javascript" src="{% static 'js/alpine.js' %}"></script>
   </head>
 
   <body class="bg-zinc-50 dark:bg-zinc-700 w-screen h-screen">
-    {% include "background.html" %}
     {% block content %}
     {% endblock %}
     {% wagtailuserbar %}
-    <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+    <script defer type="text/javascript" src="{% static 'js/app.js' %}"></script>
   </div>
 </body>
 </html>

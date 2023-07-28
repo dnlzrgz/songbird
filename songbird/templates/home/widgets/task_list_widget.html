@@ -1,0 +1,16 @@
+<article
+  draggable="true"
+  class="absolute p-4 max-w-md mx-auto text-sm font-normal bg-white border border-gray-200 rounded-lg"
+  x-data
+>
+  <header>
+    <span>{{ value.title }}</span>
+  </header>
+  <main>
+    <ul>
+      {% for task in value.tasks %}
+        <li>{{ task }}</li>
+      {% endfor %}
+    </ul>
+  </main>
+</article>

@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-{% load static %}
+
 
 {% block content %}
+  {% with widget=page.widgets %}
+    {{ widget }}
+  {% endwith %}
+
+  {% include "background.html" %}
 {% endblock content %}
