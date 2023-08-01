@@ -1,16 +1,15 @@
 FROM python:3.11-slim-bookworm
 
-RUN useradd wagtail
+WORKDIR /usr/src/app
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV PORT=8000
 
+ENV PORT=8000
 EXPOSE ${PORT}
 
-WORKDIR /app
-
+# Container dependencies
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
   curl \
   libjpeg62-turbo-dev \
@@ -18,17 +17,20 @@ RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-r
   libwebp-dev \
   && rm -rf /var/lib/apt/lists/*
 
+# Download and setup tailwindcss CLI
 RUN curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && \
   mv tailwindcss-linux-x64 tailwindcss && \
   chmod +x tailwindcss
 
-COPY requirements.txt .
+# Install dependencies
+COPY ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN chown wagtail:wagtail /app
+# Copy entrypoint.sh
+COPY ./entrypoint.sh .
+RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
 
-# COPY --chown=wagtail:wagtail . .
+COPY . .
 
-# USER wagtail
-
-CMD set -xe; python manage.py collectstatic --noinput --clear; python manage.py migrate --noinput; gunicorn songbird.wsgi:application
+ENTRYPOINT [ "/usr/src/app/entrypoint.sh" ]

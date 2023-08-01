@@ -5,6 +5,7 @@
 
 # Python and others
 __pycache__
+.ruff_cache
 *.pyc
 .DS_Store
 *.swp

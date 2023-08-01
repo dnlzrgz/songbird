@@ -1,0 +1,70 @@
+### Builder ###
+FROM python:3.11-slim-bookworm as builder
+
+# Set work directory
+WORKDIR /usr/src/app
+
+# Set env variables
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Install system dependencies
+RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
+  curl \
+  libjpeg62-turbo-dev \
+  zlib1g-dev \
+  libwebp-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install project dependencies
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+# Download Tailwind cli
+RUN curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 && \
+  mv tailwindcss-linux-x64 tailwindcss
+
+### Final ###
+FROM python:3.11-slim-bookworm
+
+# Create directory for wagtail user
+RUN mkdir -p /home/wagtail
+
+# Create wagtail user
+RUN addgroup --system wagtail && adduser --system --group wagtail
+
+# Set env variables
+ENV HOME=/home/wagtail
+ENV APP_HOME=/home/wagtail/web
+
+# Create directories
+RUN mkdir ${APP_HOME} && \
+  mkdir ${APP_HOME}/staticfiles && \
+  mkdir ${APP_HOME}/mediafiles
+
+WORKDIR ${APP_HOME}
+
+# Install dependencies
+RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
+  libjpeg62-turbo-dev \
+  zlib1g-dev \
+  libwebp-dev \
+  && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+COPY --from=builder /usr/src/app/tailwindcss .
+RUN pip install --no-cache-dir /wheels/*
+
+# Copy project
+COPY . ${APP_HOME}
+
+# Chown all files
+RUN chown -R wagtail:wagtail ${APP_HOME}
+
+# Run Tailwind & remove it
+RUN ./tailwindcss -i ./theme/*.css -o ./songbird/static/css/style.css --minify && \
+  rm ./tailwindcss
+
+# Change user
+USER wagtail
