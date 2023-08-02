@@ -68,7 +68,9 @@ if DEBUG:
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -123,6 +125,20 @@ DATABASES = {
         "PORT": env.int("DB_PORT", 5432),
     }
 }
+
+# Cache
+# https://docs.djangoproject.com/en/4.2/topics/cache/
+if not DEBUG:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": env.str("CACHE_URL"),
+        }
+    }
+
+    CACHE_MIDDLEWARE_ALIAS = env.str("CACHE_ALIAS", "default")
+    CACHE_MIDDLEWARE_SECONDS = env.int("CACHE_SECONDS", 86_400)
+    CACHE_MIDDLEWARE_KEY_PREFIX = env.str("CACHE_KEY_PREFIX", "")
 
 
 # Password validation
@@ -202,3 +218,7 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 # Email backed
 # https://docs.djangoproject.com/en/4.2/topics/email/
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+# CSRF
+CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]

@@ -56,6 +56,9 @@ COPY --from=builder /usr/src/app/requirements.txt .
 COPY --from=builder /usr/src/app/tailwindcss .
 RUN pip install --no-cache-dir /wheels/*
 
+# chmod Tailwind cli
+RUN chmod +x ${APP_HOME}/tailwindcss
+
 # Copy project
 COPY . ${APP_HOME}
 
@@ -64,7 +67,7 @@ RUN chown -R wagtail:wagtail ${APP_HOME}
 
 # Run Tailwind & remove it
 RUN ./tailwindcss -i ./theme/*.css -o ./songbird/static/css/style.css --minify && \
-  rm ./tailwindcss
+  rm ./tailwindcss && rm -rf ./theme
 
 # Change user
 USER wagtail

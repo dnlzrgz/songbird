@@ -20,6 +20,8 @@ clean:
 	rm -rf .ruff_cache media static tailwindcss
 	rm -rf ./home/__pycache__
 	rm -rf ./songbird/__pycache__
+	rm -rf ./static
+	rm -rf ./staticfiles
 
 .PHONY: run
 run:
